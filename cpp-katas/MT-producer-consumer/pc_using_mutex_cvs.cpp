@@ -8,6 +8,7 @@
 #include <mutex>
 #include <vector>
 #include <string>
+#include <syncstream>
 #include <condition_variable>
 
 using std::vector;
@@ -60,7 +61,7 @@ class Queue {
         {
             std::unique_lock<std::mutex> ul(mut);
             while (size == capacity) {
-                std::cout << "*** Thread: " << std::this_thread::get_id() << " waiting on consumer." << std::endl;
+		    std::osyncstream(std::cout) << "*** Thread: " << std::this_thread::get_id() << " waiting on consumer." << std::endl;
                 cv_on_consumer.wait(ul);
             }
 
@@ -77,7 +78,7 @@ class Queue {
         {
             std::unique_lock<std::mutex> ul(mut);
             while (size == 0) {
-                std::cout << "*** Thread: " << std::this_thread::get_id() << " waiting on producer." << std::endl;
+		    std::osyncstream(std::cout) << "*** Thread: " << std::this_thread::get_id() << " waiting on producer." << std::endl;
                 cv_on_producer.wait(ul);
             }
     
@@ -107,7 +108,7 @@ class Producer {
 
             string item = "[P " + std::to_string(id) + "; Item " + std::to_string(i) + "]";
             queue.addElem(item);
-            std::cout << "Enqueing: " << item << std::endl;
+	    std::osyncstream(std::cout) << "Enqueing: " << item << std::endl;
         }
         return true;
     }
@@ -127,7 +128,7 @@ class Consumer {
         for (int i=1; i<=limit; i++) {
             string item;
             queue.getElem(item);
-            std::cout << "        C: " << id <<  "; Dequeing: " << item << std::endl;
+	    std::osyncstream(std::cout) << "        C: " << id <<  "; Dequeing: " << item << std::endl;
 
             // sleep simulates doing something with the item
             std::this_thread::sleep_for(std::chrono::milliseconds(randomN()));

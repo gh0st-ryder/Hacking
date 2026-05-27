@@ -8,6 +8,7 @@
 #include <mutex>
 #include <vector>
 #include <string>
+#include <syncstream>
 
 using std::vector;
 using std::string;
@@ -80,7 +81,7 @@ class Producer {
             string item = "[P " + std::to_string(id) + "; Item " + std::to_string(i) + "]";
             std::this_thread::sleep_for(std::chrono::milliseconds(randomN()));
             if (queue.addElem(item)) {
-                std::cout << "Enqueing: " << item << std::endl;
+		    std::osyncstream(std::cout) << "Enqueing: " << item << std::endl;
                 i++;
             }
         }
@@ -103,7 +104,7 @@ class Consumer {
             string item;
             std::this_thread::sleep_for(std::chrono::milliseconds(randomN()));
             if (queue.getElem(item)) {
-                std::cout << "        C: " << id <<  "; Dequeing: " << item << std::endl;
+		    std::osyncstream(std::cout) << "        C: " << id <<  "; Dequeing: " << item << std::endl;
                 i++;
             }
         }
