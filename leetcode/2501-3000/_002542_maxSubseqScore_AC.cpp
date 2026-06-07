@@ -1,7 +1,6 @@
 //
-// This solution is algorithmically correct, but runs into a TLE
-// 19/28 cases pass; rest TLE.
-//  
+// Clears all test cases!
+//
 class Solution {
     struct ValIndex {
         int val=0;
